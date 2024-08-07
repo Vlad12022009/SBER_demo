@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ user_info.profile }}</h1>
+    <h2>Количество средств: {{ money }}{% if transaction_money %} (+{{transaction_money}}) {% endif %}</h2>
+{% if not user.id == user_info.profile.id %}
+    {% if MoneyError %}
+        <p>{{ MoneyError.0 }}</p>
+        <p>{{ MoneyError.1 }}</p>
+    {% endif %}
+    
+    <form action="" method="post" autocomplete="off">
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <td>{{ form.money.label_tag }}</td>
+                <td oninput="formatPhoneNumber()">{{ form.money }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.commentary.label_tag }}</td>
+                <td>{{ form.commentary }}</td>
+            </tr>
+        </table>
+        <input type="submit" value="Отправить">
+    </form>
+{% endif %}
+<script>
+
+
+
+    function formatPhoneNumber() {
+        // Удаляем все нецифровые символы
+        input = document.getElementById("id_money")
+        new_value = String(input.value).replace(/\./g, '');
+        if (isNaN(Number(new_value))){
+            new_value = new_value.slice(0, -1); 
+        }
+        input.value = Number(new_value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+</script>
+{% endblock %}

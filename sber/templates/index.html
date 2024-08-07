@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% for i in all_users %}
+            <a href="/user_profile/{{ i.id }}/{{ user.id }}/" style="font-size: 30px; text-decoration: none; color: black;">{{ i }}</a> <p></p>
+        {% endfor %}
+    {% else %}
+        <a href="/register/">Зарегестрируйтесь</a> <span>или</span> <a href="/login/">войдите</a> <span>в аккаунт для доступа к сервису</span>
+    {% endif %}
+{% endblock %}
+
+

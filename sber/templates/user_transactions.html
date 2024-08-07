@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+user_transition_new
+{% block content %}
+    {% if user_transition_new %}
+        <h1>Новые</h1>
+        {% for i in user_transition_new %}
+            {% if user == i.user %}
+                <p style="color: red; margin-left: 30px;">Перевод: -{{i.translation_money}} пользователю {{ i.other_user }}|{{ i.commentary }}</p>
+            {% else %}
+                <p style="color: green; margin-left: 30px;">Получено: +{{i.translation_money}} от пользователя {{ i.user }}|{{ i.commentary }}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% for i in user_transition.all %}
+        {% if not i in user_transition_new%}
+            {% if user == i.user %}
+                <p style="color: red;">Перевод: -{{i.translation_money}} пользователю {{ i.other_user }}|{{ i.commentary }}</p>
+            {% else %}
+                <p style="color: green;">Получено: +{{i.translation_money}} от пользователя {{ i.user }}|{{ i.commentary }}</p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
