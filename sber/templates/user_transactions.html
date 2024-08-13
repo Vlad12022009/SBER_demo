@@ -1,24 +1,101 @@
 {% extends "base.html" %}
 user_transition_new
 {% block content %}
+<div id="tranc-table">
+<table class="table_blur">
+    <tr>
+        {% if user_transition_new %}
+        <th></th>
+        {% endif %}
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Отправитель</th>
+        <th>Получатель</th>
+        <th>Сообщение</th>
+    </tr>
     {% if user_transition_new %}
-        <h1>Новые</h1>
         {% for i in user_transition_new %}
+        <tr class="tr-item">
             {% if user == i.user %}
-                <p style="color: red; margin-left: 30px;">Перевод: -{{i.translation_money}} пользователю {{ i.other_user }}|{{ i.commentary }}</p>
+                <td style="border: 1px solid #FF7777;">Новое</td>
+                <td style="border: 1px solid #FF7777;">{{ i.date }}</td>
+                <td style="color: #FF7777; border: 1px solid #FF7777;" class="money">-{{ i.translation_money }}</td>
+                <td style="border: 1px solid #FF7777; color: #73BBA3;">{{ i.user }} (Вы)</td>
+                <td style="border: 1px solid #FF7777;">{{ i.other_user }}</td>
+                <td style="border: 1px solid #FF7777;">{{ i.commentary }}</td>
             {% else %}
-                <p style="color: green; margin-left: 30px;">Получено: +{{i.translation_money}} от пользователя {{ i.user }}|{{ i.commentary }}</p>
+                <td style="border: 1px solid #73BBA3;">Новое</td>
+                <td style="border: 1px solid #73BBA3;">{{ i.date }}</td>
+                <td style="color: #73BBA3; border: 1px solid #73BBA3;" class="money">+{{ i.translation_money }}</td>
+                <td style="border: 1px solid #73BBA3;">{{ i.user }}</td>
+                <td style="border: 1px solid #73BBA3; color: #73BBA3;">{{ i.other_user }} (Вы)</td>
+                <td style="border: 1px solid #73BBA3;">{{ i.commentary }}</td>
             {% endif %}
+        </tr>
         {% endfor %}
     {% endif %}
-
+    
     {% for i in user_transition.all %}
         {% if not i in user_transition_new%}
-            {% if user == i.user %}
-                <p style="color: red;">Перевод: -{{i.translation_money}} пользователю {{ i.other_user }}|{{ i.commentary }}</p>
-            {% else %}
-                <p style="color: green;">Получено: +{{i.translation_money}} от пользователя {{ i.user }}|{{ i.commentary }}</p>
-            {% endif %}
+            <tr class="tr-item">
+                {% if user_transition_new %}
+                <td></td>
+                {% endif %}
+                {% if user == i.user %}
+                    <td style="border: 1px solid #FF7777;">{{ i.date }}</td>
+                    <td style="color: #FF7777; border: 1px solid #FF7777;" class="money">-{{ i.translation_money }}</td>
+                    <td style="border: 1px solid #FF7777; color: #73BBA3;">{{ i.user }} (Вы)</td>
+                    <td style="border: 1px solid #FF7777;">{{ i.other_user }}</td>
+                    <td style="border: 1px solid #FF7777;">{{ i.commentary }}</td>
+                {% else %}
+                    <td style="border: 1px solid #73BBA3;">{{ i.date }}</td>
+                    <td style="color: #73BBA3; border: 1px solid #73BBA3;" class="money">+{{ i.translation_money }}</td>
+                    <td style="border: 1px solid #73BBA3;">{{ i.user }}</td>
+                    <td style="border: 1px solid #73BBA3; color: #73BBA3;">{{ i.other_user }} (Вы)</td>
+                    <td style="border: 1px solid #73BBA3;">{{ i.commentary }}</td>
+                {% endif %}
+            </tr>
+
         {% endif %}
     {% endfor %}
+</table>
+</div>
+<div id="btn-div">
+<button id="show-more" style="display: none;">Показать все</button>
+</div>  
+<script>
+
+    const showMoreButton = document.getElementById('show-more');
+    let money = document.getElementsByClassName('money')
+
+    // Функция для показа новых элементов
+    function showMoreItems() {
+        const hiddenItems = document.querySelectorAll('.tr-item');
+        console.log(hiddenItems);
+        for (let i = 0; i < items.length; i++) {
+            items[i].style.display = 'table-row'
+        }
+        showMoreButton.style.display = 'none';
+        // Если все элементы показаны, скрываем кнопку
+    }
+    for (let i = 0; i < money.length; i++){
+        all_money = money[i].innerHTML
+        money[i].innerHTML = String(all_money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
+    // Скрываем все элементы, кроме первых 20
+    const items = document.querySelectorAll('.tr-item');
+    for (let i = 0; i < items.length; i++) {
+        if (i >= 15) {
+            items[i].style.display = 'none'; // Убедитесь, что они скрыты
+        } 
+    }
+
+    // Показать кнопку, если элементов больше 20
+    if (items.length > 20) {
+        showMoreButton.style.display = 'block';
+    }
+
+    showMoreButton.addEventListener('click', showMoreItems);
+</script>
 {% endblock %}

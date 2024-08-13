@@ -1,9 +1,9 @@
 <nav>
-    <a href="/" id=''> Главная</a>
     <div class="nav-menu">
         {% if user.is_authenticated %}
+            <a href="/" id=''> Главная</a>
             <a href="/user_profile/{{ user.id }}/{{ user.id }}/">{{ user }} </a>
-            <a href="/transactions/">Транзакции {{user.userprofile.get_new_transitions}}</a>
+            <a href="/transactions/" id="transactions-nav">Транзакции {% if user.userprofile.get_new_transitions%}<span class="notification">{{user.userprofile.get_new_transitions}}</span> {% endif %}</a>
             <a href="/logout/">Выйти</a>
         {% else %}
         <a href="/register/">Регистрация</a>

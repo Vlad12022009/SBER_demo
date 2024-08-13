@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from transition.views import index, logout_profile, RegistrationView, Login, profile_user, add_userprofile, transactions    
+from transition.views import index, logout_profile, RegistrationView, Login, profile_user, transactions    
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +27,5 @@ urlpatterns = [
     path('register/', RegistrationView.as_view()),
     path('login/', Login.as_view()),
     path('user_profile/<int:pk>/<int:other_pk>/', profile_user),
-    path('add_userprofile/', add_userprofile, name='login_succes'),
-    path('transactions/', transactions)
-]
+    path('transactions/', transactions),
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

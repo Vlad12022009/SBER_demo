@@ -5,17 +5,18 @@ from .models import UserProfile
 from django.core.exceptions import ValidationError
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
+    email = forms.EmailField(label='Почта')
     class Meta:
         model = User
         fields = ['username', 'email']
         
 
-
+class AvatarForm(forms.Form):
+    avatar = forms.ImageField(required=True, label='Фото')
 
 
 class TransitionForm(forms.Form):
-    money = forms.CharField(label='Перевод')
+    money = forms.CharField(label='Сумма')
     commentary = forms.CharField(label='Сообщение', max_length=100, required=False)
 
     def clean_money(self):

@@ -1,13 +1,25 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
     {% if user.is_authenticated %}
+        <div id="users">
         {% for i in all_users %}
-            <a href="/user_profile/{{ i.id }}/{{ user.id }}/" style="font-size: 30px; text-decoration: none; color: black;">{{ i }}</a> <p></p>
+            <div class="center">
+                <div class="article-card">
+                    <div class="content">
+                        <a href="/user_profile/{{ i.id }}/{{ user.id }}/" class="user">{{ i }}</a>
+                    </div>
+                    <img src="{% static i.userprofile.avatar.url %}" alt="{{ profile }}" height="300" width="300" class="avatar">
+                </div>
+            </div>
         {% endfor %}
+        </div>
+
+
     {% else %}
-        <a href="/register/">Зарегестрируйтесь</a> <span>или</span> <a href="/login/">войдите</a> <span>в аккаунт для доступа к сервису</span>
+        <div id="text-no-login"><a href="/register/" class="no-login-text">Зарегестрируйтесь</a> <span> или </span> <a href="/login/" class="no-login-text">войдите</a> <span>в аккаунт для доступа к сервису</span></div>
     {% endif %}
 {% endblock %}
+
 
 

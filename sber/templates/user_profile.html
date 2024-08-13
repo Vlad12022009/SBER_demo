@@ -1,42 +1,55 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-    <h1>{{ user_info.profile }}</h1>
-    <h2>Количество средств: {{ money }}{% if transaction_money %} (+{{transaction_money}}) {% endif %}</h2>
-{% if not user.id == user_info.profile.id %}
-    {% if MoneyError %}
-        <p>{{ MoneyError.0 }}</p>
-        <p>{{ MoneyError.1 }}</p>
+<div class="profile">
+    <h2 id="all_money">Количество средств: <span id="balanc"> {{ money }} </span> <span id="transaction_money">{% if transaction_money %}
+            (+{{transaction_money}}) {% endif %} </span></h2>
+        <img src="{% static user_info.avatar.url %}" alt="{{ profile }}" height="400" width="400" class="avatar">
+        <h1>{{ user_info.profile }}</h1>
+        {% if user.id == user_info.profile.id %}
+            <form action="" method="post" autocomplete="off" enctype="multipart/form-data" class="image-form">
+                {% csrf_token %}
+            
+                {{ form.as_p }}
+                <input type="submit" value="Изменить" style="margin-left: 15px;">
+            </form>
+        {% endif%}
+         
+
+    {% if not user.id == user_info.profile.id %}
+        {% if MoneyError %}
+            <p style="margin: 0;">{{ MoneyError.0 }}</p>
+            <p>{{ MoneyError.1 }}</p>
+        {% endif %}
+        
+        <form action="" method="post" autocomplete="off" class="transaction-form">
+            {% csrf_token %}
+            <h1 id="h1-transition">Перевод</h1>
+            <hr />
+            <table>
+                <tr>
+                    <td>{{ form.money.label_tag }}</td>
+                    <td oninput="formatPhoneNumber()" >{{ form.money }}</td>
+                    <td><span>$</span></td>
+                </tr>
+                <tr>
+                    <td>{{ form.commentary.label_tag }}</td>
+                    <td >{{ form.commentary }}</td>
+                </tr>
+            </table>
+            <input type="submit" value="Перевести" id="btn-transition">
+        </form> 
     {% endif %}
-    
-    <form action="" method="post" autocomplete="off">
-        {% csrf_token %}
+</div>
 
-        <table>
-            <tr>
-                <td>{{ form.money.label_tag }}</td>
-                <td oninput="formatPhoneNumber()">{{ form.money }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.commentary.label_tag }}</td>
-                <td>{{ form.commentary }}</td>
-            </tr>
-        </table>
-        <input type="submit" value="Отправить">
-    </form>
-{% endif %}
 <script>
-
-
-
     function formatPhoneNumber() {
         // Удаляем все нецифровые символы
         input = document.getElementById("id_money")
-        new_value = String(input.value).replace(/\./g, '');
-        if (isNaN(Number(new_value))){
-            new_value = new_value.slice(0, -1); 
-        }
-        input.value = Number(new_value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        new_value = String(input.value).replace(/[^\d]/g, '');
+        input.value = Number(new_value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");                                                                   
     }
 </script>
+
+
 {% endblock %}
