@@ -28,4 +28,7 @@ urlpatterns = [
     path('login/', Login.as_view()),
     path('user_profile/<int:pk>/<int:other_pk>/', profile_user),
     path('transactions/', transactions),
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
