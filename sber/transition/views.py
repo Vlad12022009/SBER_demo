@@ -49,7 +49,6 @@ def profile_user(request, pk, other_pk):
         if request.method == 'POST':
             if form.is_valid():
                 image = form.cleaned_data.get('avatar')
-                print(image)
                 user_sender.userprofile.avatar = image
                 user_sender.userprofile.save()
     else:
